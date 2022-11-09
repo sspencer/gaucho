@@ -1,0 +1,138 @@
+// Code generated with goa v3.10.2, DO NOT EDIT.
+//
+// item protocol buffer definition
+//
+// Command:
+// $ goa gen gaucho/services/item/design -o services/item
+
+syntax = "proto3";
+
+package item;
+
+option go_package = "/itempb";
+
+// Service that provides item API
+service Item {
+	// Retrieve item by the given id
+	rpc Get (GetRequest) returns (GetResponse);
+	// Retrieve all items
+	rpc GetAll (GetAllRequest) returns (GetAllResponse);
+	// Create an item
+	rpc Add (AddRequest) returns (AddResponse);
+	// Update an item
+	rpc Update (UpdateRequest) returns (UpdateResponse);
+	// Remove item
+	rpc Remove (RemoveRequest) returns (RemoveResponse);
+}
+
+message GetRequest {
+	uint32 field = 1;
+}
+
+message GetResponse {
+	// ID is the unique id of the item.
+	uint32 id = 1;
+	// Unique Item Name
+	string name = 2;
+	// Item Description
+	optional string description = 3;
+	// Amount of damage item causes
+	sint32 damage = 4;
+	// Amount of healing item generates
+	sint32 healing = 5;
+	// Amount of protection item provides
+	sint32 protection = 6;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+	repeated StoredItem field = 1;
+}
+// A StoredItem describes a item retrieved by the character item.
+message StoredItem {
+	// ID is the unique id of the item.
+	uint32 id = 1;
+	// Unique Item Name
+	string name = 2;
+	// Item Description
+	optional string description = 3;
+	// Amount of damage item causes
+	sint32 damage = 4;
+	// Amount of healing item generates
+	sint32 healing = 5;
+	// Amount of protection item provides
+	sint32 protection = 6;
+}
+
+message AddRequest {
+	// Unique Item Name
+	string name = 1;
+	// Item Description
+	optional string description = 2;
+	// Amount of damage item causes
+	sint32 damage = 3;
+	// Amount of healing item generates
+	sint32 healing = 4;
+	// Amount of protection item provides
+	sint32 protection = 5;
+}
+
+message AddResponse {
+	// ID is the unique id of the item.
+	uint32 id = 1;
+	// Unique Item Name
+	string name = 2;
+	// Item Description
+	optional string description = 3;
+	// Amount of damage item causes
+	sint32 damage = 4;
+	// Amount of healing item generates
+	sint32 healing = 5;
+	// Amount of protection item provides
+	sint32 protection = 6;
+}
+
+message UpdateRequest {
+	// ID of item to update
+	uint32 id = 1;
+	// Item fields to update
+	Item2 item = 2;
+}
+// A game item like a sword, shield or potion.
+message Item2 {
+	// Unique Item Name
+	string name = 1;
+	// Item Description
+	optional string description = 2;
+	// Amount of damage item causes
+	sint32 damage = 3;
+	// Amount of healing item generates
+	sint32 healing = 4;
+	// Amount of protection item provides
+	sint32 protection = 5;
+}
+
+message UpdateResponse {
+	// ID is the unique id of the item.
+	uint32 id = 1;
+	// Unique Item Name
+	string name = 2;
+	// Item Description
+	optional string description = 3;
+	// Amount of damage item causes
+	sint32 damage = 4;
+	// Amount of healing item generates
+	sint32 healing = 5;
+	// Amount of protection item provides
+	sint32 protection = 6;
+}
+
+message RemoveRequest {
+	// ID of item to remove
+	uint32 id = 1;
+}
+
+message RemoveResponse {
+}

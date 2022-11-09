@@ -1,0 +1,126 @@
+// Code generated with goa v3.10.2, DO NOT EDIT.
+//
+// character protocol buffer definition
+//
+// Command:
+// $ goa gen gaucho/services/character/design -o services/character
+
+syntax = "proto3";
+
+package character;
+
+option go_package = "/characterpb";
+
+// Service that provides character API
+service Character {
+	// Retrieve character by the given id
+	rpc Get (GetRequest) returns (GetResponse);
+	// Retrieve all characters
+	rpc GetAll (GetAllRequest) returns (GetAllResponse);
+	// Create a character
+	rpc Add (AddRequest) returns (AddResponse);
+	// Update a character
+	rpc Update (UpdateRequest) returns (UpdateResponse);
+	// Remove character
+	rpc Remove (RemoveRequest) returns (RemoveResponse);
+}
+
+message GetRequest {
+	uint32 field = 1;
+}
+
+message GetResponse {
+	// ID is the unique id of the character.
+	uint32 id = 1;
+	// Unique Character Name
+	string name = 2;
+	// Character Description
+	string description = 3;
+	// Character Experience
+	sint32 experience = 4;
+	// Character Health
+	sint32 health = 5;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+	repeated StoredCharacter field = 1;
+}
+// A StoredCharacter describes a character retrieved by the character service.
+message StoredCharacter {
+	// ID is the unique id of the character.
+	uint32 id = 1;
+	// Unique Character Name
+	string name = 2;
+	// Character Description
+	string description = 3;
+	// Character Experience
+	sint32 experience = 4;
+	// Character Health
+	sint32 health = 5;
+}
+
+message AddRequest {
+	// Unique Character Name
+	string name = 1;
+	// Character Description
+	string description = 2;
+	// Character Health
+	sint32 health = 3;
+	// Character Experience
+	sint32 experience = 4;
+}
+
+message AddResponse {
+	// ID is the unique id of the character.
+	uint32 id = 1;
+	// Unique Character Name
+	string name = 2;
+	// Character Description
+	string description = 3;
+	// Character Experience
+	sint32 experience = 4;
+	// Character Health
+	sint32 health = 5;
+}
+
+message UpdateRequest {
+	// ID of character to update
+	uint32 id = 1;
+	// Character parameters to update
+	Character2 character = 2;
+}
+// Character in the game
+message Character2 {
+	// Unique Character Name
+	string name = 1;
+	// Character Description
+	string description = 2;
+	// Character Health
+	sint32 health = 3;
+	// Character Experience
+	sint32 experience = 4;
+}
+
+message UpdateResponse {
+	// ID is the unique id of the character.
+	uint32 id = 1;
+	// Unique Character Name
+	string name = 2;
+	// Character Description
+	string description = 3;
+	// Character Experience
+	sint32 experience = 4;
+	// Character Health
+	sint32 health = 5;
+}
+
+message RemoveRequest {
+	// ID of character to remove
+	uint32 id = 1;
+}
+
+message RemoveResponse {
+}

@@ -1,0 +1,126 @@
+### Add first character
+POST http://localhost:8000/character
+Content-Type: application/json
+
+{
+  "name": "Penny",
+  "description": "a fast dawg",
+  "health": 90,
+  "experience": 70
+}
+
+### Add second character
+POST http://localhost:8000/character
+Content-Type: application/json
+
+{
+  "name": "Rusty",
+  "description": "a big dawg",
+  "health": 80,
+  "experience": 75
+}
+
+### Get all characters
+GET http://localhost:8000/character
+
+### Update second character
+PUT http://localhost:8000/character/2
+Content-Type: application/json
+
+{
+  "name": "Rusty",
+  "description": "a really big dawg",
+  "health": 80,
+  "experience": 62
+}
+
+### Get character
+GET http://localhost:8000/character/2
+
+### Add temporary character
+POST http://localhost:8000/character
+Content-Type: application/json
+
+{
+  "name": "Odin",
+  "description": "a fluffy dawg",
+  "health": 60,
+  "experience": 55
+}
+
+### Remove character
+DELETE http://localhost:8000/character/3
+
+# ===== ITEMS =====
+
+### Add first item
+POST http://localhost:8000/item
+Content-Type: application/json
+
+{
+  "name": "Water bowl",
+  "description": "Metallic circular vessel used to hold liquids",
+  "damage": 0,
+  "healing": 5,
+  "protection": 0
+}
+
+### Add second item
+POST http://localhost:8000/item
+Content-Type: application/json
+
+{
+  "name": "Leash",
+  "description": "Long lead with a metal buckle at one end and a loop on the other",
+  "damage": 2,
+  "healing": 7,
+  "protection": 3
+}
+
+### Get all items
+GET http://localhost:8000/item
+
+### Update second item
+PUT http://localhost:8000/item/2
+Content-Type: application/json
+
+{
+  "name": "Leash",
+  "description": "Long lead with a metal buckle at one end and a loop on the other",
+  "damage": 3,
+  "healing": 4,
+  "protection": 5
+}
+
+### Get item
+GET http://localhost:8000/item/2
+
+### Add temporary item
+POST http://localhost:8000/item
+Content-Type: application/json
+
+{
+  "name": "Collar",
+  "description": "Short lead with metal buckle on one end",
+  "damage": 1,
+  "healing": 1,
+  "protection": 1
+}
+
+### Remove item
+DELETE http://localhost:8000/item/3
+
+# ===== INVENTORY =====
+
+### Add inventory 1
+PUT http://localhost:8000/inventory/1/item/1
+
+### Add inventory 2
+PUT http://localhost:8000/inventory/1/item/2
+
+### Show inventory
+GET http://localhost:8000/inventory/1
+
+### Remove item
+DELETE http://localhost:8000/inventory/1/item/1
+

@@ -1,0 +1,51 @@
+// Code generated with goa v3.10.2, DO NOT EDIT.
+//
+// inventory protocol buffer definition
+//
+// Command:
+// $ goa gen gaucho/services/inventory/design -o services/inventory
+
+syntax = "proto3";
+
+package inventory;
+
+option go_package = "/inventorypb";
+
+// Service that provides character API
+service Inventory {
+	// Retrieve all inventory items for the given character
+	rpc Get (GetRequest) returns (GetResponse);
+	// Add inventory item to the given character
+	rpc Add (AddRequest) returns (AddResponse);
+	// Remove inventory item from the given character
+	rpc Remove (RemoveRequest) returns (RemoveResponse);
+}
+
+message GetRequest {
+	uint32 field = 1;
+}
+
+message GetResponse {
+	repeated uint32 field = 1;
+}
+
+message AddRequest {
+	// Character ID
+	uint32 character_id = 1;
+	// Item ID to add to character's inventory
+	uint32 item_id = 2;
+}
+
+message AddResponse {
+	repeated uint32 field = 1;
+}
+
+message RemoveRequest {
+	// Character ID
+	uint32 character_id = 1;
+	// Item ID to add to character's inventory
+	uint32 item_id = 2;
+}
+
+message RemoveResponse {
+}

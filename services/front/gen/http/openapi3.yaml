@@ -1,0 +1,744 @@
+openapi: 3.0.3
+info:
+    title: Gaucho Game Service API
+    description: The gaucho game service API tracks gaming entities including characters, items and inventories.
+    version: "1.0"
+servers:
+    - url: http://localhost:8000/
+paths:
+    /character:
+        get:
+            tags:
+                - front
+            summary: list_characters front
+            description: Get all characters
+            operationId: front#list_characters
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/StoredCharacter'
+                                example:
+                                    - description: Maxime facilis veritatis in et.
+                                      experience: 53
+                                      health: 48
+                                      id: 42
+                                      name: lga
+                                    - description: Maxime facilis veritatis in et.
+                                      experience: 53
+                                      health: 48
+                                      id: 42
+                                      name: lga
+                            example:
+                                - description: Maxime facilis veritatis in et.
+                                  experience: 53
+                                  health: 48
+                                  id: 42
+                                  name: lga
+                                - description: Maxime facilis veritatis in et.
+                                  experience: 53
+                                  health: 48
+                                  id: 42
+                                  name: lga
+                                - description: Maxime facilis veritatis in et.
+                                  experience: 53
+                                  health: 48
+                                  id: 42
+                                  name: lga
+        post:
+            tags:
+                - front
+            summary: add_character front
+            description: Create new character
+            operationId: front#add_character
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddCharacterRequestBody'
+                        example:
+                            description: Quia occaecati nesciunt.
+                            experience: 71
+                            health: 3
+                            name: 6d
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StoredCharacter'
+                            example:
+                                description: Vero dolorem eos.
+                                experience: 7
+                                health: 35
+                                id: 42
+                                name: 75j
+                "400":
+                    description: 'already_exists: That name already exists'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    /character/{id}:
+        delete:
+            tags:
+                - front
+            summary: remove_character front
+            description: Remove character from storage
+            operationId: front#remove_character
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of character to remove
+                  required: true
+                  schema:
+                    type: integer
+                    description: ID of character to remove
+                    example: 1319605403
+                    minimum: 1
+                  example: 3322035430
+            responses:
+                "204":
+                    description: No Content response.
+                "404":
+                    description: 'not_found: Character not found'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        get:
+            tags:
+                - front
+            summary: show_character front
+            description: Get character by ID
+            operationId: front#show_character
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of character to retrieve
+                  required: true
+                  schema:
+                    type: integer
+                    description: ID of character to retrieve
+                    example: 2272023249
+                    minimum: 1
+                  example: 3694808392
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StoredCharacter'
+                            example:
+                                description: Sunt sit fugiat ut.
+                                experience: 32
+                                health: 14
+                                id: 42
+                                name: bc8
+                "404":
+                    description: 'not_found: Character not found'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        put:
+            tags:
+                - front
+            summary: update_character front
+            description: Update new character
+            operationId: front#update_character
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of character to update
+                  required: true
+                  schema:
+                    type: integer
+                    description: ID of character to update
+                    example: 1205047956
+                    minimum: 1
+                  example: 3094013251
+            requestBody:
+                description: Character values to update
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddCharacterRequestBody'
+                        example:
+                            description: Ex modi cum ea maiores.
+                            experience: 52
+                            health: 23
+                            name: lir
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StoredCharacter'
+                            example:
+                                description: Velit sunt tempore nisi sequi fugiat.
+                                experience: 76
+                                health: 88
+                                id: 42
+                                name: yaj
+                "400":
+                    description: 'already_exists: That name already exists'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                "404":
+                    description: 'not_found: Character not found'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    /inventory/{id}:
+        get:
+            tags:
+                - front
+            summary: show_inventory front
+            description: Show all items held by a character
+            operationId: front#show_inventory
+            parameters:
+                - name: id
+                  in: path
+                  description: Character ID
+                  required: true
+                  schema:
+                    type: integer
+                    description: Character ID
+                    example: 970819568
+                    minimum: 1
+                  example: 1543119593
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: integer
+                                    example: 1376762414
+                                example:
+                                    - 626163572
+                                    - 1990947709
+                                    - 2304592213
+                            example:
+                                - 2090922821
+                                - 2735392795
+                                - 251357941
+    /inventory/{id}/item/{item_id}:
+        delete:
+            tags:
+                - front
+            summary: remove_inventory front
+            description: Remove item from character's inventory
+            operationId: front#remove_inventory
+            parameters:
+                - name: id
+                  in: path
+                  description: Character ID
+                  required: true
+                  schema:
+                    type: integer
+                    description: Character ID
+                    example: 2283374411
+                    minimum: 1
+                  example: 774081598
+                - name: item_id
+                  in: path
+                  description: Item ID
+                  required: true
+                  schema:
+                    type: integer
+                    description: Item ID
+                    example: 3440665841
+                    minimum: 1
+                  example: 793438018
+            responses:
+                "204":
+                    description: No Content response.
+                "404":
+                    description: 'not_found: Character or Item not found'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        put:
+            tags:
+                - front
+            summary: update_inventory front
+            description: Add item to character's inventory
+            operationId: front#update_inventory
+            parameters:
+                - name: id
+                  in: path
+                  description: Character ID
+                  required: true
+                  schema:
+                    type: integer
+                    description: Character ID
+                    example: 2221724024
+                    minimum: 1
+                  example: 2063685467
+                - name: item_id
+                  in: path
+                  description: Item ID
+                  required: true
+                  schema:
+                    type: integer
+                    description: Item ID
+                    example: 1097380324
+                    minimum: 1
+                  example: 464263847
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: integer
+                                    example: 2312332482
+                                example:
+                                    - 3085285996
+                                    - 3348092122
+                                    - 2282257699
+                                    - 3732154630
+                            example:
+                                - 2821249992
+                                - 3252588814
+    /item:
+        get:
+            tags:
+                - front
+            summary: list_items front
+            description: Get all items
+            operationId: front#list_items
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/StoredItem'
+                                example:
+                                    - damage: 4
+                                      description: Et omnis iste.
+                                      healing: 48
+                                      id: 87
+                                      name: r7
+                                      protection: 11
+                                    - damage: 4
+                                      description: Et omnis iste.
+                                      healing: 48
+                                      id: 87
+                                      name: r7
+                                      protection: 11
+                            example:
+                                - damage: 4
+                                  description: Et omnis iste.
+                                  healing: 48
+                                  id: 87
+                                  name: r7
+                                  protection: 11
+                                - damage: 4
+                                  description: Et omnis iste.
+                                  healing: 48
+                                  id: 87
+                                  name: r7
+                                  protection: 11
+                                - damage: 4
+                                  description: Et omnis iste.
+                                  healing: 48
+                                  id: 87
+                                  name: r7
+                                  protection: 11
+                                - damage: 4
+                                  description: Et omnis iste.
+                                  healing: 48
+                                  id: 87
+                                  name: r7
+                                  protection: 11
+        post:
+            tags:
+                - front
+            summary: add_item front
+            description: Create new item
+            operationId: front#add_item
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddItemRequestBody'
+                        example:
+                            damage: 1
+                            description: Consequatur consequatur dolores tenetur adipisci.
+                            healing: 30
+                            name: q9m
+                            protection: 14
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StoredItem'
+                            example:
+                                damage: 16
+                                description: Dolor eveniet.
+                                healing: 13
+                                id: 87
+                                name: qfo
+                                protection: 3
+                "400":
+                    description: 'already_exists: That name already exists'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    /item/{id}:
+        delete:
+            tags:
+                - front
+            summary: remove_item front
+            description: Remove item from storage
+            operationId: front#remove_item
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of item to remove
+                  required: true
+                  schema:
+                    type: integer
+                    description: ID of item to remove
+                    example: 4086005691
+                    minimum: 1
+                  example: 2610517482
+            responses:
+                "204":
+                    description: No Content response.
+                "404":
+                    description: 'not_found: Item not found'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        get:
+            tags:
+                - front
+            summary: show_item front
+            description: Get item by ID
+            operationId: front#show_item
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of item to retrieve
+                  required: true
+                  schema:
+                    type: integer
+                    description: ID of item to retrieve
+                    example: 1058105226
+                    minimum: 1
+                  example: 1230234013
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StoredItem'
+                            example:
+                                damage: 15
+                                description: Velit autem repellendus nulla veniam ullam debitis.
+                                healing: 16
+                                id: 87
+                                name: ff
+                                protection: 15
+                "404":
+                    description: 'not_found: Item not found'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        put:
+            tags:
+                - front
+            summary: update_item front
+            description: Update new item
+            operationId: front#update_item
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of item to update
+                  required: true
+                  schema:
+                    type: integer
+                    description: ID of item to update
+                    example: 3306371177
+                    minimum: 1
+                  example: 4229051331
+            requestBody:
+                description: Item values to update
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddItemRequestBody'
+                        example:
+                            damage: 4
+                            description: Officiis rerum non dolor.
+                            healing: 42
+                            name: dz
+                            protection: 15
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StoredItem'
+                            example:
+                                damage: 0
+                                description: Reiciendis quasi harum minima labore officiis.
+                                healing: 43
+                                id: 87
+                                name: 3b
+                                protection: 16
+                "400":
+                    description: 'already_exists: That name already exists'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                "404":
+                    description: 'not_found: Item not found'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+components:
+    schemas:
+        AddCharacterRequestBody:
+            type: object
+            properties:
+                description:
+                    type: string
+                    description: Character Description
+                    example: Laboriosam tempora voluptate reprehenderit nihil alias.
+                experience:
+                    type: integer
+                    description: Character Experience
+                    example: 49
+                    minimum: 1
+                    maximum: 100
+                health:
+                    type: integer
+                    description: Character Health
+                    example: 57
+                    minimum: 0
+                    maximum: 100
+                name:
+                    type: string
+                    description: Unique Character Name
+                    example: 3tb
+                    minLength: 2
+                    maxLength: 50
+            example:
+                description: Pariatur quidem.
+                experience: 10
+                health: 70
+                name: m7r
+            required:
+                - name
+                - description
+                - health
+                - experience
+        AddItemRequestBody:
+            type: object
+            properties:
+                damage:
+                    type: integer
+                    description: Amount of damage item causes
+                    example: 4
+                    minimum: 0
+                    maximum: 25
+                description:
+                    type: string
+                    description: Item Description
+                    example: Et tempore maiores tempora et.
+                healing:
+                    type: integer
+                    description: Amount of healing item generates
+                    example: 0
+                    minimum: 0
+                    maximum: 50
+                name:
+                    type: string
+                    description: Unique Item Name
+                    example: 4i
+                    minLength: 2
+                    maxLength: 50
+                protection:
+                    type: integer
+                    description: Amount of protection item provides
+                    example: 5
+                    minimum: 0
+                    maximum: 20
+            example:
+                damage: 4
+                description: Id magni eaque.
+                healing: 13
+                name: n5
+                protection: 10
+            required:
+                - name
+                - damage
+                - healing
+                - protection
+        Error:
+            type: object
+            properties:
+                fault:
+                    type: boolean
+                    description: Is the error a server-side fault?
+                    example: false
+                id:
+                    type: string
+                    description: ID is a unique identifier for this particular occurrence of the problem.
+                    example: 123abc
+                message:
+                    type: string
+                    description: Message is a human-readable explanation specific to this occurrence of the problem.
+                    example: parameter 'p' must be an integer
+                name:
+                    type: string
+                    description: Name is the name of this class of errors.
+                    example: bad_request
+                temporary:
+                    type: boolean
+                    description: Is the error temporary?
+                    example: false
+                timeout:
+                    type: boolean
+                    description: Is the error a timeout?
+                    example: false
+            description: Character not found
+            example:
+                id: 3F1FKVRR
+                message: Value of ID must be an integer
+                name: bad_request
+            required:
+                - name
+                - id
+                - message
+                - temporary
+                - timeout
+                - fault
+        StoredCharacter:
+            type: object
+            properties:
+                description:
+                    type: string
+                    description: Character Description
+                    example: Maxime sit nesciunt.
+                experience:
+                    type: integer
+                    description: Character Experience
+                    example: 2
+                    minimum: 1
+                    maximum: 100
+                health:
+                    type: integer
+                    description: Character Health
+                    example: 52
+                    minimum: 0
+                    maximum: 100
+                id:
+                    type: integer
+                    description: ID is the unique id of the character.
+                    example: 42
+                name:
+                    type: string
+                    description: Unique Character Name
+                    example: b1l
+                    minLength: 2
+                    maxLength: 50
+            example:
+                description: Dolor molestias consequatur labore porro.
+                experience: 18
+                health: 98
+                id: 42
+                name: z2b
+            required:
+                - id
+                - description
+                - name
+                - health
+                - experience
+        StoredItem:
+            type: object
+            properties:
+                damage:
+                    type: integer
+                    description: Amount of damage item causes
+                    example: 22
+                    minimum: 0
+                    maximum: 25
+                description:
+                    type: string
+                    description: Item Description
+                    example: Ducimus veniam aut id vel.
+                healing:
+                    type: integer
+                    description: Amount of healing item generates
+                    example: 36
+                    minimum: 0
+                    maximum: 50
+                id:
+                    type: integer
+                    description: ID is the unique id of the item.
+                    example: 87
+                name:
+                    type: string
+                    description: Unique Item Name
+                    example: q1
+                    minLength: 2
+                    maxLength: 50
+                protection:
+                    type: integer
+                    description: Amount of protection item provides
+                    example: 4
+                    minimum: 0
+                    maximum: 20
+            example:
+                damage: 7
+                description: Fugit a veritatis.
+                healing: 48
+                id: 87
+                name: z0r
+                protection: 0
+            required:
+                - id
+                - name
+                - damage
+                - healing
+                - protection
+tags:
+    - name: front
+      description: Public HTTP frontend

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Generating Goa code..."
+
+for svc in front character inventory item; do
+  goa gen gaucho/services/${svc}/design -o services/${svc}
+done

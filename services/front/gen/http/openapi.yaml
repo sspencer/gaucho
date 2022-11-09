@@ -1,0 +1,1375 @@
+swagger: "2.0"
+info:
+    title: Gaucho Game Service API
+    description: The gaucho game service API tracks gaming entities including characters, items and inventories.
+    version: ""
+host: localhost:8000
+consumes:
+    - application/json
+    - application/xml
+    - application/gob
+produces:
+    - application/json
+    - application/xml
+    - application/gob
+paths:
+    /character:
+        get:
+            tags:
+                - front
+            summary: list_characters front
+            description: Get all characters
+            operationId: front#list_characters
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/StoredCharacterResponse'
+            schemes:
+                - http
+        post:
+            tags:
+                - front
+            summary: add_character front
+            description: Create new character
+            operationId: front#add_character
+            produces:
+                - application/json
+            parameters:
+                - name: add_character_request_body
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/FrontAddCharacterRequestBody'
+                    required:
+                        - name
+                        - description
+                        - health
+                        - experience
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/FrontAddCharacterResponseBody'
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        $ref: '#/definitions/FrontAddCharacterAlreadyExistsResponseBody'
+            schemes:
+                - http
+    /character/{id}:
+        get:
+            tags:
+                - front
+            summary: show_character front
+            description: Get character by ID
+            operationId: front#show_character
+            produces:
+                - application/json
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of character to retrieve
+                  required: true
+                  type: integer
+                  minimum: 1
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/FrontShowCharacterResponseBody'
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/FrontShowCharacterNotFoundResponseBody'
+            schemes:
+                - http
+        put:
+            tags:
+                - front
+            summary: update_character front
+            description: Update new character
+            operationId: front#update_character
+            produces:
+                - application/json
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of character to update
+                  required: true
+                  type: integer
+                  minimum: 1
+                - name: update_character_request_body
+                  in: body
+                  description: Character values to update
+                  required: true
+                  schema:
+                    $ref: '#/definitions/FrontUpdateCharacterRequestBody'
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/FrontUpdateCharacterResponseBody'
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        $ref: '#/definitions/FrontUpdateCharacterAlreadyExistsResponseBody'
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/FrontUpdateCharacterNotFoundResponseBody'
+            schemes:
+                - http
+        delete:
+            tags:
+                - front
+            summary: remove_character front
+            description: Remove character from storage
+            operationId: front#remove_character
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of character to remove
+                  required: true
+                  type: integer
+                  minimum: 1
+            responses:
+                "204":
+                    description: No Content response.
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/FrontRemoveCharacterNotFoundResponseBody'
+            schemes:
+                - http
+    /inventory/{id}:
+        get:
+            tags:
+                - front
+            summary: show_inventory front
+            description: Show all items held by a character
+            operationId: front#show_inventory
+            parameters:
+                - name: id
+                  in: path
+                  description: Character ID
+                  required: true
+                  type: integer
+                  minimum: 1
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        type: array
+                        items:
+                            type: integer
+                            example: 461101508
+                            format: int32
+            schemes:
+                - http
+    /inventory/{id}/item/{item_id}:
+        put:
+            tags:
+                - front
+            summary: update_inventory front
+            description: Add item to character's inventory
+            operationId: front#update_inventory
+            parameters:
+                - name: id
+                  in: path
+                  description: Character ID
+                  required: true
+                  type: integer
+                  minimum: 1
+                - name: item_id
+                  in: path
+                  description: Item ID
+                  required: true
+                  type: integer
+                  minimum: 1
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        type: array
+                        items:
+                            type: integer
+                            example: 3457877882
+                            format: int32
+            schemes:
+                - http
+        delete:
+            tags:
+                - front
+            summary: remove_inventory front
+            description: Remove item from character's inventory
+            operationId: front#remove_inventory
+            parameters:
+                - name: id
+                  in: path
+                  description: Character ID
+                  required: true
+                  type: integer
+                  minimum: 1
+                - name: item_id
+                  in: path
+                  description: Item ID
+                  required: true
+                  type: integer
+                  minimum: 1
+            responses:
+                "204":
+                    description: No Content response.
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/FrontRemoveInventoryNotFoundResponseBody'
+            schemes:
+                - http
+    /item:
+        get:
+            tags:
+                - front
+            summary: list_items front
+            description: Get all items
+            operationId: front#list_items
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/StoredItemResponse'
+            schemes:
+                - http
+        post:
+            tags:
+                - front
+            summary: add_item front
+            description: Create new item
+            operationId: front#add_item
+            produces:
+                - application/json
+            parameters:
+                - name: add_item_request_body
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/FrontAddItemRequestBody'
+                    required:
+                        - name
+                        - damage
+                        - healing
+                        - protection
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/FrontAddItemResponseBody'
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        $ref: '#/definitions/FrontAddItemAlreadyExistsResponseBody'
+            schemes:
+                - http
+    /item/{id}:
+        get:
+            tags:
+                - front
+            summary: show_item front
+            description: Get item by ID
+            operationId: front#show_item
+            produces:
+                - application/json
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of item to retrieve
+                  required: true
+                  type: integer
+                  minimum: 1
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/FrontShowItemResponseBody'
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/FrontShowItemNotFoundResponseBody'
+            schemes:
+                - http
+        put:
+            tags:
+                - front
+            summary: update_item front
+            description: Update new item
+            operationId: front#update_item
+            produces:
+                - application/json
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of item to update
+                  required: true
+                  type: integer
+                  minimum: 1
+                - name: update_item_request_body
+                  in: body
+                  description: Item values to update
+                  required: true
+                  schema:
+                    $ref: '#/definitions/FrontUpdateItemRequestBody'
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/FrontUpdateItemResponseBody'
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        $ref: '#/definitions/FrontUpdateItemAlreadyExistsResponseBody'
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/FrontUpdateItemNotFoundResponseBody'
+            schemes:
+                - http
+        delete:
+            tags:
+                - front
+            summary: remove_item front
+            description: Remove item from storage
+            operationId: front#remove_item
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of item to remove
+                  required: true
+                  type: integer
+                  minimum: 1
+            responses:
+                "204":
+                    description: No Content response.
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/FrontRemoveItemNotFoundResponseBody'
+            schemes:
+                - http
+definitions:
+    FrontAddCharacterAlreadyExistsResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: true
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: true
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: That name already exists (default view)
+        example:
+            fault: false
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontAddCharacterRequestBody:
+        title: FrontAddCharacterRequestBody
+        type: object
+        properties:
+            description:
+                type: string
+                description: Character Description
+                example: Perspiciatis mollitia sint molestias tempora et.
+            experience:
+                type: integer
+                description: Character Experience
+                example: 52
+                minimum: 1
+                maximum: 100
+            health:
+                type: integer
+                description: Character Health
+                example: 36
+                minimum: 0
+                maximum: 100
+            name:
+                type: string
+                description: Unique Character Name
+                example: uo5
+                minLength: 2
+                maxLength: 50
+        example:
+            description: Consequatur voluptatem nisi voluptates nulla illum inventore.
+            experience: 87
+            health: 91
+            name: bya
+        required:
+            - name
+            - description
+            - health
+            - experience
+    FrontAddCharacterResponseBody:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-character; view=default'
+        type: object
+        properties:
+            description:
+                type: string
+                description: Character Description
+                example: Qui optio rem recusandae.
+            experience:
+                type: integer
+                description: Character Experience
+                example: 62
+                minimum: 1
+                maximum: 100
+            health:
+                type: integer
+                description: Character Health
+                example: 23
+                minimum: 0
+                maximum: 100
+            id:
+                type: integer
+                description: ID is the unique id of the character.
+                example: 42
+                format: int32
+            name:
+                type: string
+                description: Unique Character Name
+                example: jir
+                minLength: 2
+                maxLength: 50
+        description: add_character_response_body result type (default view)
+        example:
+            description: Facere libero et fugit molestiae.
+            experience: 78
+            health: 41
+            id: 42
+            name: aso
+        required:
+            - id
+            - description
+            - name
+            - health
+            - experience
+    FrontAddItemAlreadyExistsResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: true
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: true
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: false
+        description: That name already exists (default view)
+        example:
+            fault: false
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: false
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontAddItemRequestBody:
+        title: FrontAddItemRequestBody
+        type: object
+        properties:
+            damage:
+                type: integer
+                description: Amount of damage item causes
+                example: 15
+                minimum: 0
+                maximum: 25
+            description:
+                type: string
+                description: Item Description
+                example: Repudiandae vel mollitia voluptatem libero ducimus ut.
+            healing:
+                type: integer
+                description: Amount of healing item generates
+                example: 25
+                minimum: 0
+                maximum: 50
+            name:
+                type: string
+                description: Unique Item Name
+                example: kbl
+                minLength: 2
+                maxLength: 50
+            protection:
+                type: integer
+                description: Amount of protection item provides
+                example: 7
+                minimum: 0
+                maximum: 20
+        example:
+            damage: 1
+            description: Voluptatem laboriosam exercitationem aliquid.
+            healing: 36
+            name: i3r
+            protection: 18
+        required:
+            - name
+            - damage
+            - healing
+            - protection
+    FrontAddItemResponseBody:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-item; view=default'
+        type: object
+        properties:
+            damage:
+                type: integer
+                description: Amount of damage item causes
+                example: 4
+                minimum: 0
+                maximum: 25
+            description:
+                type: string
+                description: Item Description
+                example: Eius exercitationem eum.
+            healing:
+                type: integer
+                description: Amount of healing item generates
+                example: 8
+                minimum: 0
+                maximum: 50
+            id:
+                type: integer
+                description: ID is the unique id of the item.
+                example: 87
+                format: int32
+            name:
+                type: string
+                description: Unique Item Name
+                example: "690"
+                minLength: 2
+                maxLength: 50
+            protection:
+                type: integer
+                description: Amount of protection item provides
+                example: 10
+                minimum: 0
+                maximum: 20
+        description: add_item_response_body result type (default view)
+        example:
+            damage: 22
+            description: Nihil facere.
+            healing: 37
+            id: 87
+            name: 9t
+            protection: 2
+        required:
+            - id
+            - name
+            - damage
+            - healing
+            - protection
+    FrontRemoveCharacterNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: false
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: true
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: false
+        description: Character not found (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: false
+            timeout: true
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontRemoveInventoryNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: true
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: true
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: Character or Item not found (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontRemoveItemNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: false
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: false
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: false
+        description: Item not found (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontShowCharacterNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: false
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: false
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: Character not found (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: false
+            timeout: true
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontShowCharacterResponseBody:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-character; view=default'
+        type: object
+        properties:
+            description:
+                type: string
+                description: Character Description
+                example: Qui consequatur dolorum deserunt facilis sit.
+            experience:
+                type: integer
+                description: Character Experience
+                example: 5
+                minimum: 1
+                maximum: 100
+            health:
+                type: integer
+                description: Character Health
+                example: 18
+                minimum: 0
+                maximum: 100
+            id:
+                type: integer
+                description: ID is the unique id of the character.
+                example: 42
+                format: int32
+            name:
+                type: string
+                description: Unique Character Name
+                example: e0
+                minLength: 2
+                maxLength: 50
+        description: show_character_response_body result type (default view)
+        example:
+            description: Perferendis est ab.
+            experience: 6
+            health: 16
+            id: 42
+            name: fu
+        required:
+            - id
+            - description
+            - name
+            - health
+            - experience
+    FrontShowItemNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: false
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: false
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: Item not found (default view)
+        example:
+            fault: false
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: true
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontShowItemResponseBody:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-item; view=default'
+        type: object
+        properties:
+            damage:
+                type: integer
+                description: Amount of damage item causes
+                example: 23
+                minimum: 0
+                maximum: 25
+            description:
+                type: string
+                description: Item Description
+                example: Sequi laudantium ut.
+            healing:
+                type: integer
+                description: Amount of healing item generates
+                example: 49
+                minimum: 0
+                maximum: 50
+            id:
+                type: integer
+                description: ID is the unique id of the item.
+                example: 87
+                format: int32
+            name:
+                type: string
+                description: Unique Item Name
+                example: cb0
+                minLength: 2
+                maxLength: 50
+            protection:
+                type: integer
+                description: Amount of protection item provides
+                example: 9
+                minimum: 0
+                maximum: 20
+        description: show_item_response_body result type (default view)
+        example:
+            damage: 1
+            description: Numquam et.
+            healing: 16
+            id: 87
+            name: za
+            protection: 4
+        required:
+            - id
+            - name
+            - damage
+            - healing
+            - protection
+    FrontUpdateCharacterAlreadyExistsResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: true
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: true
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: That name already exists (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: true
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontUpdateCharacterNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: false
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: false
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: Character not found (default view)
+        example:
+            fault: false
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: false
+            timeout: true
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontUpdateCharacterRequestBody:
+        title: FrontUpdateCharacterRequestBody
+        type: object
+        properties:
+            description:
+                type: string
+                description: Character Description
+                example: Vel assumenda voluptates quo minus.
+            experience:
+                type: integer
+                description: Character Experience
+                example: 40
+                minimum: 1
+                maximum: 100
+            health:
+                type: integer
+                description: Character Health
+                example: 52
+                minimum: 0
+                maximum: 100
+            name:
+                type: string
+                description: Unique Character Name
+                example: mvx
+                minLength: 2
+                maxLength: 50
+        description: Character in the game
+        example:
+            description: Nihil repellendus consectetur eveniet quisquam sunt et.
+            experience: 60
+            health: 49
+            name: td
+        required:
+            - name
+            - description
+            - health
+            - experience
+    FrontUpdateCharacterResponseBody:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-character; view=default'
+        type: object
+        properties:
+            description:
+                type: string
+                description: Character Description
+                example: Accusantium quia enim cum.
+            experience:
+                type: integer
+                description: Character Experience
+                example: 33
+                minimum: 1
+                maximum: 100
+            health:
+                type: integer
+                description: Character Health
+                example: 64
+                minimum: 0
+                maximum: 100
+            id:
+                type: integer
+                description: ID is the unique id of the character.
+                example: 42
+                format: int32
+            name:
+                type: string
+                description: Unique Character Name
+                example: wn
+                minLength: 2
+                maxLength: 50
+        description: update_character_response_body result type (default view)
+        example:
+            description: Et assumenda reprehenderit.
+            experience: 97
+            health: 58
+            id: 42
+            name: 61z
+        required:
+            - id
+            - description
+            - name
+            - health
+            - experience
+    FrontUpdateItemAlreadyExistsResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: true
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: false
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: That name already exists (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontUpdateItemNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: true
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: false
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: false
+        description: Item not found (default view)
+        example:
+            fault: false
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    FrontUpdateItemRequestBody:
+        title: FrontUpdateItemRequestBody
+        type: object
+        properties:
+            damage:
+                type: integer
+                description: Amount of damage item causes
+                example: 20
+                minimum: 0
+                maximum: 25
+            description:
+                type: string
+                description: Item Description
+                example: Aut ipsam nam.
+            healing:
+                type: integer
+                description: Amount of healing item generates
+                example: 19
+                minimum: 0
+                maximum: 50
+            name:
+                type: string
+                description: Unique Item Name
+                example: wv7
+                minLength: 2
+                maxLength: 50
+            protection:
+                type: integer
+                description: Amount of protection item provides
+                example: 13
+                minimum: 0
+                maximum: 20
+        description: A game item like a sword, shield or potion.
+        example:
+            damage: 18
+            description: Enim voluptatem.
+            healing: 26
+            name: gkb
+            protection: 0
+        required:
+            - name
+            - damage
+            - healing
+            - protection
+    FrontUpdateItemResponseBody:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-item; view=default'
+        type: object
+        properties:
+            damage:
+                type: integer
+                description: Amount of damage item causes
+                example: 9
+                minimum: 0
+                maximum: 25
+            description:
+                type: string
+                description: Item Description
+                example: Eos esse vitae rerum officiis iusto.
+            healing:
+                type: integer
+                description: Amount of healing item generates
+                example: 18
+                minimum: 0
+                maximum: 50
+            id:
+                type: integer
+                description: ID is the unique id of the item.
+                example: 87
+                format: int32
+            name:
+                type: string
+                description: Unique Item Name
+                example: rwh
+                minLength: 2
+                maxLength: 50
+            protection:
+                type: integer
+                description: Amount of protection item provides
+                example: 5
+                minimum: 0
+                maximum: 20
+        description: update_item_response_body result type (default view)
+        example:
+            damage: 15
+            description: Consequuntur dolorem adipisci molestias tempore impedit.
+            healing: 37
+            id: 87
+            name: 1p6
+            protection: 17
+        required:
+            - id
+            - name
+            - damage
+            - healing
+            - protection
+    StoredCharacterResponse:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-character; view=default'
+        type: object
+        properties:
+            description:
+                type: string
+                description: Character Description
+                example: Vel dicta et omnis.
+            experience:
+                type: integer
+                description: Character Experience
+                example: 59
+                minimum: 1
+                maximum: 100
+            health:
+                type: integer
+                description: Character Health
+                example: 36
+                minimum: 0
+                maximum: 100
+            id:
+                type: integer
+                description: ID is the unique id of the character.
+                example: 42
+                format: int32
+            name:
+                type: string
+                description: Unique Character Name
+                example: ufc
+                minLength: 2
+                maxLength: 50
+        description: A StoredCharacter describes a character retrieved by the character service. (default view)
+        example:
+            description: Repudiandae sit atque et ut et temporibus.
+            experience: 88
+            health: 93
+            id: 42
+            name: v9m
+        required:
+            - id
+            - description
+            - name
+            - health
+            - experience
+    StoredItemResponse:
+        title: 'Mediatype identifier: application/vnd.gaucho.stored-item; view=default'
+        type: object
+        properties:
+            damage:
+                type: integer
+                description: Amount of damage item causes
+                example: 15
+                minimum: 0
+                maximum: 25
+            description:
+                type: string
+                description: Item Description
+                example: Ut quod ex quia provident qui ullam.
+            healing:
+                type: integer
+                description: Amount of healing item generates
+                example: 25
+                minimum: 0
+                maximum: 50
+            id:
+                type: integer
+                description: ID is the unique id of the item.
+                example: 87
+                format: int32
+            name:
+                type: string
+                description: Unique Item Name
+                example: z6h
+                minLength: 2
+                maxLength: 50
+            protection:
+                type: integer
+                description: Amount of protection item provides
+                example: 8
+                minimum: 0
+                maximum: 20
+        description: A StoredItem describes a item retrieved by the character item. (default view)
+        example:
+            damage: 5
+            description: Voluptatibus dolorem tempore nisi distinctio velit.
+            healing: 41
+            id: 87
+            name: dpw
+            protection: 0
+        required:
+            - id
+            - name
+            - damage
+            - healing
+            - protection
